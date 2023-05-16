@@ -18,7 +18,7 @@ namespace burger
       try
       {
         DataTable dt = new DataTable();
-        dt = DalHelper.GetClientes();
+        dt = ClaMys.GetClientes();
         dgvCli.DataSource = dt;
       }
       catch (Exception ex)
@@ -28,7 +28,7 @@ namespace burger
       try
       {
         DataTable dt = new DataTable();
-        dt = DalHelper.GetPedidos();
+        dt = ClaMys.GetPedidos();
         dgvPed.DataSource = dt;
       }
       catch (Exception ex)
@@ -38,7 +38,7 @@ namespace burger
       try
       {
         DataTable dt = new DataTable();
-        dt = DalHelper.GetProdutos();
+        dt = ClaMys.GetProdutos();
         dgvProd.DataSource = dt;
       }
       catch (Exception ex)
@@ -83,73 +83,35 @@ namespace burger
     private void button2_Click(object sender, EventArgs e)
     {
     }
-  
     private void button3_Click(object sender, EventArgs e)
     {
-    }
-  
+    } 
     private void button8_Click(object sender, EventArgs e)
     {
-    }
-  
+    } 
     private void button3_Click_1(object sender, EventArgs e)
     {
-      try
-      {
-        DataTable dt = new DataTable();
-        dt = DalHelper.GetClientes();
-        dgvCli.DataSource = dt;
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show("Erro : " + ex.Message);
-      }
-    }
-    
+    }  
     private void button1_Click(object sender, EventArgs e)
     {
-      try
-      {
-        DataTable dt = new DataTable();
-        dt = DalHelper.GetPedidos();
-        dgvPed.DataSource = dt;
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show("Erro : " + ex.Message);
-      }
-    }
-    
+    }  
     private void button2_Click_1(object sender, EventArgs e)
     {
-      try
-      {
-        DataTable dt = new DataTable();
-        dt = DalHelper.GetProdutos();
-        dgvProd.DataSource = dt;
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show("Erro : " + ex.Message);
-      }
-    }
-    
+    }    
     private void tabControl1_Click(object sender, EventArgs e)
     {
       //MessageBox.Show("clicou");
-    }
-    
+    }   
     private void textBox4_TextChanged(object sender, EventArgs e)
     {
     
-    }
-    
+    }   
     private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
     {
       if (e.RowIndex >= 0)
       {
         DataGridViewRow row = this.dgvCli.Rows[e.RowIndex];
-        txtId.Text = row.Cells["CLI_ID"].Value.ToString();
+        txtId.Text = row.Cells["id"].Value.ToString();
         txtNome.Text = row.Cells["Nome"].Value.ToString();
         txtCpf.Text = row.Cells["CPF"].Value.ToString();
         txtTel.Text = row.Cells["Telefone"].Value.ToString();
@@ -165,13 +127,12 @@ namespace burger
     private void dgvProd_CellClick(object sender, DataGridViewCellEventArgs e)
     {
       DataGridViewRow row = this.dgvProd.Rows[e.RowIndex];
-      txtCodProd.Text = row.Cells["PROD_ID"].Value.ToString();
+      txtCodProd.Text = row.Cells["iD"].Value.ToString();
       txtNomeProd.Text = row.Cells["Nome"].Value.ToString();
       txtDescProd.Text = row.Cells["Descricao"].Value.ToString();
-      cmbTipo.Text = row.Cells["Tipo"].Value.ToString();
+      cmbTipo.Text = row.Cells["categoria"].Value.ToString();
       numValor.Text = row.Cells["Valor"].Value.ToString();
     }
-
     private void button18_Click(object sender, EventArgs e)
     {
       txtCodProd.Text = "";
@@ -180,7 +141,6 @@ namespace burger
       cmbTipo.Text = "";
       numValor.Text = "";
     }
-
     private void button12_Click(object sender, EventArgs e)
     {
       try
@@ -197,10 +157,9 @@ namespace burger
         MessageBox.Show("Erro : " + ex.Message);
       }
     }
-
     private void button5_Click(object sender, EventArgs e)
     {
-      if (txtUser.Text == "admin" && txtPwd.Text == "admin")
+      if (ClaMys.VerificarCredenciais(txtUser.Text, txtPwd.Text)) 
       {
         tabControl1.Visible = true;
         panel2.Visible = false;
@@ -210,7 +169,6 @@ namespace burger
         MessageBox.Show("Acesso negado!");
       }
     }
-
     private void button9_ClickAsync(object sender, EventArgs e)
     {
       button9.Enabled = false;  
@@ -220,7 +178,6 @@ namespace burger
       txtUf.Text = resultado.Uf;
       button9.Enabled = true;
     }
-
     private void button4_Click(object sender, EventArgs e)
     {
       txtId.Text = "";
@@ -233,7 +190,6 @@ namespace burger
       txtBairro.Text = "";
       txtLog.Text = "";
     }
-
     private void Form1_KeyDown(object sender, KeyEventArgs e)
     {
       if (e.KeyCode == Keys.Enter)
@@ -241,7 +197,6 @@ namespace burger
         button5.PerformClick();
       }
     }
-
     private void button21_Click(object sender, EventArgs e)
     {
       string result = MyClass.GetAccessToken();
@@ -250,48 +205,44 @@ namespace burger
       rtb1.Text = accessToken;
       button21.Enabled = false;
     }
-
     private void button23_Click(object sender, EventArgs e)
     {
       string result = MyClass.Polling(accessToken);
       rtb1.Text = result;
     }
-
     private void button11_Click(object sender, EventArgs e)
     {
       MyClass.ConfirmarPedido(txtPedidoId.Text, accessToken);
     }
-
     private void button14_Click(object sender, EventArgs e)
     {
       MyClass.PrepararPedido(txtPedidoId.Text, accessToken);
     }
-
     private void button20_Click(object sender, EventArgs e)
     {
       MyClass.EntregarPedido(txtPedidoId.Text, accessToken);
     }
-
     private void button19_Click(object sender, EventArgs e)
     {
       MyClass.ProntoPedido(txtPedidoId.Text, accessToken);
     }
-
     private void button10_Click(object sender, EventArgs e)
     {
       string result = MyClass.DetalhesPedido(txtPedidoId.Text, accessToken);
       rtb1.Text = result;
     }
-
     private void button22_Click(object sender, EventArgs e)
     {
       MyClass.AcknowledgeEvent(accessToken, rtb1.Text);
     }
-
     private void button24_Click(object sender, EventArgs e)
     {
       string result = MyClass.GetMerchantStatus(accessToken);
       rtb1.Text = result;
+    }
+    private void button25_Click(object sender, EventArgs e)
+    {
+      ClaMys.DbConect();
     }
   }
 }

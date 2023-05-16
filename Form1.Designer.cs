@@ -49,7 +49,6 @@
       this.label23 = new System.Windows.Forms.Label();
       this.label22 = new System.Windows.Forms.Label();
       this.label21 = new System.Windows.Forms.Label();
-      this.button3 = new System.Windows.Forms.Button();
       this.button7 = new System.Windows.Forms.Button();
       this.button6 = new System.Windows.Forms.Button();
       this.label3 = new System.Windows.Forms.Label();
@@ -71,7 +70,6 @@
       this.button14 = new System.Windows.Forms.Button();
       this.button11 = new System.Windows.Forms.Button();
       this.button10 = new System.Windows.Forms.Button();
-      this.button1 = new System.Windows.Forms.Button();
       this.comboBox4 = new System.Windows.Forms.ComboBox();
       this.txtPedidoId = new System.Windows.Forms.TextBox();
       this.label13 = new System.Windows.Forms.Label();
@@ -81,7 +79,6 @@
       this.dgvPed = new System.Windows.Forms.DataGridView();
       this.tabPage5 = new System.Windows.Forms.TabPage();
       this.button18 = new System.Windows.Forms.Button();
-      this.button2 = new System.Windows.Forms.Button();
       this.button13 = new System.Windows.Forms.Button();
       this.button12 = new System.Windows.Forms.Button();
       this.txtCodProd = new System.Windows.Forms.TextBox();
@@ -96,7 +93,6 @@
       this.label14 = new System.Windows.Forms.Label();
       this.dgvProd = new System.Windows.Forms.DataGridView();
       this.tabPage6 = new System.Windows.Forms.TabPage();
-      this.button8 = new System.Windows.Forms.Button();
       this.button15 = new System.Windows.Forms.Button();
       this.button16 = new System.Windows.Forms.Button();
       this.button17 = new System.Windows.Forms.Button();
@@ -111,6 +107,7 @@
       this.txtPwd = new System.Windows.Forms.TextBox();
       this.label5 = new System.Windows.Forms.Label();
       this.txtUser = new System.Windows.Forms.TextBox();
+      this.button25 = new System.Windows.Forms.Button();
       this.tabControl1.SuspendLayout();
       this.tabPage2.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.numDdd)).BeginInit();
@@ -128,8 +125,8 @@
       // tabControl1
       // 
       this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-      this.tabControl1.Controls.Add(this.tabPage2);
       this.tabControl1.Controls.Add(this.tabPage4);
+      this.tabControl1.Controls.Add(this.tabPage2);
       this.tabControl1.Controls.Add(this.tabPage5);
       this.tabControl1.Controls.Add(this.tabPage6);
       this.tabControl1.Location = new System.Drawing.Point(9, 83);
@@ -144,6 +141,7 @@
       // tabPage2
       // 
       this.tabPage2.BackColor = System.Drawing.Color.CadetBlue;
+      this.tabPage2.Controls.Add(this.button25);
       this.tabPage2.Controls.Add(this.button9);
       this.tabPage2.Controls.Add(this.txtTel);
       this.tabPage2.Controls.Add(this.numDdd);
@@ -162,7 +160,6 @@
       this.tabPage2.Controls.Add(this.label23);
       this.tabPage2.Controls.Add(this.label22);
       this.tabPage2.Controls.Add(this.label21);
-      this.tabPage2.Controls.Add(this.button3);
       this.tabPage2.Controls.Add(this.button7);
       this.tabPage2.Controls.Add(this.button6);
       this.tabPage2.Controls.Add(this.label3);
@@ -338,17 +335,6 @@
       this.label21.TabIndex = 23;
       this.label21.Text = "CEP:";
       // 
-      // button3
-      // 
-      this.button3.Location = new System.Drawing.Point(272, 126);
-      this.button3.Name = "button3";
-      this.button3.Size = new System.Drawing.Size(75, 23);
-      this.button3.TabIndex = 12;
-      this.button3.Text = "Carregar";
-      this.button3.UseVisualStyleBackColor = true;
-      this.button3.Visible = false;
-      this.button3.Click += new System.EventHandler(this.button3_Click_1);
-      // 
       // button7
       // 
       this.button7.Location = new System.Drawing.Point(110, 126);
@@ -449,7 +435,6 @@
       this.tabPage4.Controls.Add(this.button14);
       this.tabPage4.Controls.Add(this.button11);
       this.tabPage4.Controls.Add(this.button10);
-      this.tabPage4.Controls.Add(this.button1);
       this.tabPage4.Controls.Add(this.comboBox4);
       this.tabPage4.Controls.Add(this.txtPedidoId);
       this.tabPage4.Controls.Add(this.label13);
@@ -465,7 +450,7 @@
       // 
       // button24
       // 
-      this.button24.Location = new System.Drawing.Point(801, 79);
+      this.button24.Location = new System.Drawing.Point(576, 380);
       this.button24.Name = "button24";
       this.button24.Size = new System.Drawing.Size(75, 23);
       this.button24.TabIndex = 32;
@@ -476,15 +461,15 @@
       // rtb1
       // 
       this.rtb1.BackColor = System.Drawing.Color.PowderBlue;
-      this.rtb1.Location = new System.Drawing.Point(566, 108);
+      this.rtb1.Location = new System.Drawing.Point(17, 380);
       this.rtb1.Name = "rtb1";
-      this.rtb1.Size = new System.Drawing.Size(472, 483);
+      this.rtb1.Size = new System.Drawing.Size(472, 219);
       this.rtb1.TabIndex = 31;
       this.rtb1.Text = "";
       // 
       // button21
       // 
-      this.button21.Location = new System.Drawing.Point(720, 79);
+      this.button21.Location = new System.Drawing.Point(495, 380);
       this.button21.Name = "button21";
       this.button21.Size = new System.Drawing.Size(75, 23);
       this.button21.TabIndex = 28;
@@ -494,7 +479,7 @@
       // 
       // button23
       // 
-      this.button23.Location = new System.Drawing.Point(882, 79);
+      this.button23.Location = new System.Drawing.Point(495, 409);
       this.button23.Name = "button23";
       this.button23.Size = new System.Drawing.Size(75, 23);
       this.button23.TabIndex = 30;
@@ -504,7 +489,7 @@
       // 
       // button22
       // 
-      this.button22.Location = new System.Drawing.Point(963, 79);
+      this.button22.Location = new System.Drawing.Point(576, 409);
       this.button22.Name = "button22";
       this.button22.Size = new System.Drawing.Size(75, 23);
       this.button22.TabIndex = 29;
@@ -514,7 +499,7 @@
       // 
       // textBox1
       // 
-      this.textBox1.Location = new System.Drawing.Point(90, 68);
+      this.textBox1.Location = new System.Drawing.Point(680, 18);
       this.textBox1.Name = "textBox1";
       this.textBox1.Size = new System.Drawing.Size(100, 22);
       this.textBox1.TabIndex = 27;
@@ -569,17 +554,6 @@
       this.button10.UseVisualStyleBackColor = true;
       this.button10.Click += new System.EventHandler(this.button10_Click);
       // 
-      // button1
-      // 
-      this.button1.Location = new System.Drawing.Point(804, 25);
-      this.button1.Name = "button1";
-      this.button1.Size = new System.Drawing.Size(75, 23);
-      this.button1.TabIndex = 8;
-      this.button1.Text = "Carregar";
-      this.button1.UseVisualStyleBackColor = true;
-      this.button1.Visible = false;
-      this.button1.Click += new System.EventHandler(this.button1_Click);
-      // 
       // comboBox4
       // 
       this.comboBox4.FormattingEnabled = true;
@@ -587,7 +561,7 @@
             "fazendo",
             "entregue",
             "cancelado"});
-      this.comboBox4.Location = new System.Drawing.Point(885, 24);
+      this.comboBox4.Location = new System.Drawing.Point(642, 50);
       this.comboBox4.Name = "comboBox4";
       this.comboBox4.Size = new System.Drawing.Size(153, 24);
       this.comboBox4.TabIndex = 4;
@@ -603,7 +577,7 @@
       // label13
       // 
       this.label13.AutoSize = true;
-      this.label13.Location = new System.Drawing.Point(575, 53);
+      this.label13.Location = new System.Drawing.Point(566, 53);
       this.label13.Name = "label13";
       this.label13.Size = new System.Drawing.Size(63, 16);
       this.label13.TabIndex = 12;
@@ -612,7 +586,7 @@
       // label10
       // 
       this.label10.AutoSize = true;
-      this.label10.Location = new System.Drawing.Point(575, 21);
+      this.label10.Location = new System.Drawing.Point(33, 53);
       this.label10.Name = "label10";
       this.label10.Size = new System.Drawing.Size(39, 16);
       this.label10.TabIndex = 9;
@@ -621,7 +595,7 @@
       // label7
       // 
       this.label7.AutoSize = true;
-      this.label7.Location = new System.Drawing.Point(33, 68);
+      this.label7.Location = new System.Drawing.Point(82, 56);
       this.label7.Name = "label7";
       this.label7.Size = new System.Drawing.Size(51, 16);
       this.label7.TabIndex = 3;
@@ -640,20 +614,21 @@
       // 
       this.dgvPed.AllowUserToAddRows = false;
       this.dgvPed.AllowUserToDeleteRows = false;
+      this.dgvPed.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+      this.dgvPed.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
       this.dgvPed.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-      this.dgvPed.Location = new System.Drawing.Point(17, 108);
+      this.dgvPed.Location = new System.Drawing.Point(17, 79);
       this.dgvPed.Name = "dgvPed";
       this.dgvPed.ReadOnly = true;
       this.dgvPed.RowHeadersWidth = 51;
       this.dgvPed.RowTemplate.Height = 24;
-      this.dgvPed.Size = new System.Drawing.Size(543, 483);
+      this.dgvPed.Size = new System.Drawing.Size(778, 295);
       this.dgvPed.TabIndex = 1;
       // 
       // tabPage5
       // 
       this.tabPage5.BackColor = System.Drawing.Color.CadetBlue;
       this.tabPage5.Controls.Add(this.button18);
-      this.tabPage5.Controls.Add(this.button2);
       this.tabPage5.Controls.Add(this.button13);
       this.tabPage5.Controls.Add(this.button12);
       this.tabPage5.Controls.Add(this.txtCodProd);
@@ -682,17 +657,6 @@
       this.button18.Text = "Limpar";
       this.button18.UseVisualStyleBackColor = true;
       this.button18.Click += new System.EventHandler(this.button18_Click);
-      // 
-      // button2
-      // 
-      this.button2.Location = new System.Drawing.Point(822, 53);
-      this.button2.Name = "button2";
-      this.button2.Size = new System.Drawing.Size(75, 23);
-      this.button2.TabIndex = 8;
-      this.button2.Text = "Carregar";
-      this.button2.UseVisualStyleBackColor = true;
-      this.button2.Visible = false;
-      this.button2.Click += new System.EventHandler(this.button2_Click_1);
       // 
       // button13
       // 
@@ -822,7 +786,6 @@
       // tabPage6
       // 
       this.tabPage6.BackColor = System.Drawing.Color.CadetBlue;
-      this.tabPage6.Controls.Add(this.button8);
       this.tabPage6.Controls.Add(this.button15);
       this.tabPage6.Controls.Add(this.button16);
       this.tabPage6.Controls.Add(this.button17);
@@ -836,16 +799,6 @@
       this.tabPage6.Size = new System.Drawing.Size(1100, 618);
       this.tabPage6.TabIndex = 5;
       this.tabPage6.Text = "Equipe";
-      // 
-      // button8
-      // 
-      this.button8.Location = new System.Drawing.Point(263, 58);
-      this.button8.Name = "button8";
-      this.button8.Size = new System.Drawing.Size(75, 23);
-      this.button8.TabIndex = 26;
-      this.button8.Text = "Carregar";
-      this.button8.UseVisualStyleBackColor = true;
-      this.button8.Click += new System.EventHandler(this.button8_Click_1);
       // 
       // button15
       // 
@@ -959,7 +912,7 @@
       this.txtPwd.PasswordChar = '*';
       this.txtPwd.Size = new System.Drawing.Size(122, 22);
       this.txtPwd.TabIndex = 2;
-      this.txtPwd.Text = "admin";
+      this.txtPwd.Text = "qwerty1234";
       // 
       // label5
       // 
@@ -977,7 +930,17 @@
       this.txtUser.Name = "txtUser";
       this.txtUser.Size = new System.Drawing.Size(122, 22);
       this.txtUser.TabIndex = 1;
-      this.txtUser.Text = "admin";
+      this.txtUser.Text = "black.phillip";
+      // 
+      // button25
+      // 
+      this.button25.Location = new System.Drawing.Point(963, 122);
+      this.button25.Name = "button25";
+      this.button25.Size = new System.Drawing.Size(75, 23);
+      this.button25.TabIndex = 57;
+      this.button25.Text = "button25";
+      this.button25.UseVisualStyleBackColor = true;
+      this.button25.Click += new System.EventHandler(this.button25_Click);
       // 
       // Form1
       // 
@@ -1050,9 +1013,6 @@
     private System.Windows.Forms.Label label16;
     private System.Windows.Forms.Label label15;
     private System.Windows.Forms.Label label14;
-    private System.Windows.Forms.Button button3;
-    private System.Windows.Forms.Button button1;
-    private System.Windows.Forms.Button button2;
     private System.Windows.Forms.DataGridView dgvCoz;
     private System.Windows.Forms.TextBox txtComp;
     private System.Windows.Forms.TextBox txtNum;
@@ -1071,7 +1031,6 @@
     private System.Windows.Forms.NumericUpDown numDdd;
     private System.Windows.Forms.Label label29;
     private System.Windows.Forms.Label label28;
-    private System.Windows.Forms.Button button8;
     private System.Windows.Forms.Button button15;
     private System.Windows.Forms.Button button16;
     private System.Windows.Forms.Button button17;
@@ -1099,6 +1058,7 @@
     private System.Windows.Forms.Button button21;
     private System.Windows.Forms.RichTextBox rtb1;
     private System.Windows.Forms.Button button24;
+    private System.Windows.Forms.Button button25;
   }
 }
 
