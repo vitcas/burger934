@@ -4,7 +4,7 @@ using System.Text;
 
 namespace burger
 {
-  public class MyClass
+  public class FoodPro
   {
     public static string merchantApiHost = "https://merchant-api.ifood.com.br";
     public static string merchantId = "bd41628b-6b9d-46df-ad63-22dbe0ce72ed";
@@ -116,10 +116,9 @@ namespace burger
         return result;
       }
     }
-    public static string DetalhesPedido(string pedidoId, string accessToken)
+    public static string DetaPedido(string pedidoId, string accessToken)
     {
       string url = "https://merchant-api.ifood.com.br/order/v1.0/orders/" + pedidoId;
-
       using (HttpClient client = new HttpClient())
       {
         var request = new HttpRequestMessage
@@ -127,13 +126,10 @@ namespace burger
           Method = HttpMethod.Get,
           RequestUri = new Uri(url)
         };
-
         request.Headers.Add("Authorization", "Bearer " + accessToken);
         request.Headers.Add("accept", "application/json");
-
         HttpResponseMessage response = client.SendAsync(request).Result;
         response.EnsureSuccessStatusCode();
-
         string result = response.Content.ReadAsStringAsync().Result;
         return result;
       }

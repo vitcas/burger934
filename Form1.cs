@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Data;
+using System.Drawing;
+using System.Media;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace burger
@@ -9,22 +12,27 @@ namespace burger
   {
     public string accessToken = "";
     public string pedidoId = "";
+    public string pollresult = "";
+    private static System.Timers.Timer timer;
     public Form1()
     {
       InitializeComponent();
     }
     private void Form1_Load(object sender, EventArgs e)
     {
-      try
-      {
-        DataTable dt = new DataTable();
-        dt = ClaMys.GetClientes();
-        dgvCli.DataSource = dt;
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show("Erro : " + ex.Message);
-      }
+      PopulaPedido();
+      string formattedDate = DateTime.Now.ToString("dd-MM-yyyy");
+      label1.Text = formattedDate;  
+      string result = FoodPro.GetAccessToken();
+      dynamic responseObject = JsonConvert.DeserializeObject(result);
+      accessToken = responseObject.accessToken;
+      FoodPro.Polling(accessToken);
+      Thread.Sleep(2000); 
+      FoodPro.Polling(accessToken);
+      //Thread.Sleep(2000);
+      //string result2 = FoodPro.GetMerchantStatus(accessToken);
+    }
+    private void PopulaPedido() {
       try
       {
         DataTable dt = new DataTable();
@@ -35,214 +43,99 @@ namespace burger
       {
         MessageBox.Show("Erro : " + ex.Message);
       }
+    }
+    private void PlayAlertSound()
+    {
+        using (var soundPlayer = new SoundPlayer())
+        {
+          string soundFilePath = "whistle.wav";
+          soundPlayer.SoundLocation = soundFilePath;
+          soundPlayer.PlaySync();
+        }
+    }
+    private void FazPol() {
+      string result = FoodPro.Polling(accessToken);
+      if (result != "")
+      {
+        if (ClaMys.InsertPedidos(result, accessToken) > 0)
+        {
+          PlayAlertSound();
+        }
+        FoodPro.AcknowledgeEvent(accessToken, result);
+      }
+      pollresult = result;
+      PopulaPedido();
+      Console.WriteLine("Poll executado em: " + DateTime.Now.ToString("HH:mm:ss"));
+    }
+    private void dgvPed_CellClick_1(object sender, DataGridViewCellEventArgs e)
+    {
+      DataGridViewRow row = this.dgvPed.Rows[e.RowIndex];
+      string codigo = row.Cells["codigo"].Value.ToString();
+      txtPedidoId.Text = codigo;  
+      comboBox4.Text = row.Cells["estado"].Value.ToString();
       try
       {
         DataTable dt = new DataTable();
-        dt = ClaMys.GetProdutos();
-        dgvProd.DataSource = dt;
+        dt = ClaMys.DetalhesPedido(codigo);
+        dgvDetails.DataSource = dt;
       }
       catch (Exception ex)
       {
         MessageBox.Show("Erro : " + ex.Message);
       }
     }
-    private void button6_Click(object sender, EventArgs e)
+    private void btnConfirmaPed_Click(object sender, EventArgs e)
     {
-      try{
-        Endereco cep = new Endereco();
-        Contato con = new Contato();  
-        Cliente cli = new Cliente();
-        
-        cli.Contato = 1;
-        con.Ddd = "11";
-        con.Numero = txtTel.Text;
-
-        cli.CEP = 1;
-        cep.Bruto = txtCep.Text;
-        cep.Uf = txtUf.Text;  
-        cep.Bairro = txtBairro.Text;  
-        cep.Logradouro = txtLog.Text;
-
-        cli.Nome = txtNome.Text;
-        cli.CPF = txtCpf.Text;
-        cli.Pedidos = 0;
-
-        cli.UF = "SP";
-        cli.Bairro = txtBairro.Text;
-        cli.Logradouro = txtLog.Text;
-        
-        DalHelper.AddCli(cli);
-      }
-      catch (Exception ex){
-        MessageBox.Show("Erro : " + ex.Message);
-      }
-    } 
-    private void button7_Click(object sender, EventArgs e)
-    {
-    }  
-    private void button2_Click(object sender, EventArgs e)
-    {
+      FoodPro.ConfirmarPedido(txtPedidoId.Text, accessToken);
+      label2.Text = "Confirmado!";
     }
-    private void button3_Click(object sender, EventArgs e)
+    private void btnPreparaPed_Click(object sender, EventArgs e)
     {
-    } 
-    private void button8_Click(object sender, EventArgs e)
+      FoodPro.PrepararPedido(txtPedidoId.Text, accessToken);
+      label2.Text = "Preparando!";
+    }
+    private void btnEntregaPed_Click(object sender, EventArgs e)
     {
-    } 
-    private void button3_Click_1(object sender, EventArgs e)
+      FoodPro.EntregarPedido(txtPedidoId.Text, accessToken);
+      label2.Text = "Saiu para entrega!";
+    }
+    private void btnProntoPed_Click(object sender, EventArgs e)
     {
-    }  
-    private void button1_Click(object sender, EventArgs e)
+      FoodPro.ProntoPedido(txtPedidoId.Text, accessToken);
+      label2.Text = "Pedido pronto!";
+    }
+    private void btnPol_Click(object sender, EventArgs e)
     {
-    }  
-    private void button2_Click_1(object sender, EventArgs e)
+      FazPol();
+    }
+    private void dgvPed_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
     {
-    }    
-    private void tabControl1_Click(object sender, EventArgs e)
-    {
-      //MessageBox.Show("clicou");
-    }   
-    private void textBox4_TextChanged(object sender, EventArgs e)
-    {
-    
-    }   
-    private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-    {
-      if (e.RowIndex >= 0)
+      string estado = e.Value.ToString();
+      if (e.ColumnIndex == dgvPed.Columns["estado"].Index)    
+      switch (estado)
       {
-        DataGridViewRow row = this.dgvCli.Rows[e.RowIndex];
-        txtId.Text = row.Cells["id"].Value.ToString();
-        txtNome.Text = row.Cells["Nome"].Value.ToString();
-        txtCpf.Text = row.Cells["CPF"].Value.ToString();
-        txtTel.Text = row.Cells["Telefone"].Value.ToString();
-        txtCep.Text = row.Cells["CEP"].Value.ToString();
-        txtNum.Text = row.Cells["Numero"].Value.ToString();
-        txtComp.Text = row.Cells["Complemento"].Value.ToString();
-        txtBairro.Text = row.Cells["Bairro"].Value.ToString();
-        txtLog.Text = row.Cells["Logradouro"].Value.ToString();
+        case "novo":
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Khaki;
+          break;
+        case "confirmado":
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Aquamarine;
+          break;
+        case "cancelado":
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightCoral;
+          break;
+        case "pronto":
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Aquamarine;
+          break;
+        case "enviado":
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Aquamarine;
+          break;
+        case "concluido":
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.PaleGreen;
+          break;
+        case "preparando":
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Aquamarine;
+          break;
       }
-    }
-    private void button8_Click_1(object sender, EventArgs e){
-    }
-    private void dgvProd_CellClick(object sender, DataGridViewCellEventArgs e)
-    {
-      DataGridViewRow row = this.dgvProd.Rows[e.RowIndex];
-      txtCodProd.Text = row.Cells["iD"].Value.ToString();
-      txtNomeProd.Text = row.Cells["Nome"].Value.ToString();
-      txtDescProd.Text = row.Cells["Descricao"].Value.ToString();
-      cmbTipo.Text = row.Cells["categoria"].Value.ToString();
-      numValor.Text = row.Cells["Valor"].Value.ToString();
-    }
-    private void button18_Click(object sender, EventArgs e)
-    {
-      txtCodProd.Text = "";
-      txtNomeProd.Text = "";
-      txtDescProd.Text = "";
-      cmbTipo.Text = "";
-      numValor.Text = "";
-    }
-    private void button12_Click(object sender, EventArgs e)
-    {
-      try
-      {
-        Produto prod = new Produto();
-        prod.Nome = txtNomeProd.Text;
-        prod.Descricao = txtDescProd.Text;
-        prod.Valor = (float)numValor.Value;
-        prod.Tipo = 1;
-        DalHelper.AddProd(prod);
-      }
-      catch (Exception ex)
-      {
-        MessageBox.Show("Erro : " + ex.Message);
-      }
-    }
-    private void button5_Click(object sender, EventArgs e)
-    {
-      if (ClaMys.VerificarCredenciais(txtUser.Text, txtPwd.Text)) 
-      {
-        tabControl1.Visible = true;
-        panel2.Visible = false;
-      }
-      else
-      {
-        MessageBox.Show("Acesso negado!");
-      }
-    }
-    private void button9_ClickAsync(object sender, EventArgs e)
-    {
-      button9.Enabled = false;  
-      var resultado = Apis.ConsultarCep(txtCep.Text);
-      txtLog.Text = resultado.Logradouro;
-      txtBairro.Text = resultado.Bairro;
-      txtUf.Text = resultado.Uf;
-      button9.Enabled = true;
-    }
-    private void button4_Click(object sender, EventArgs e)
-    {
-      txtId.Text = "";
-      txtNome.Text = "";
-      txtCpf.Text = "";
-      txtTel.Text = "";
-      txtCep.Text = "";
-      txtNum.Text = "";
-      txtComp.Text = "";
-      txtBairro.Text = "";
-      txtLog.Text = "";
-    }
-    private void Form1_KeyDown(object sender, KeyEventArgs e)
-    {
-      if (e.KeyCode == Keys.Enter)
-      {
-        button5.PerformClick();
-      }
-    }
-    private void button21_Click(object sender, EventArgs e)
-    {
-      string result = MyClass.GetAccessToken();
-      dynamic responseObject = JsonConvert.DeserializeObject(result);
-      accessToken = responseObject.accessToken;
-      rtb1.Text = accessToken;
-      button21.Enabled = false;
-    }
-    private void button23_Click(object sender, EventArgs e)
-    {
-      string result = MyClass.Polling(accessToken);
-      rtb1.Text = result;
-    }
-    private void button11_Click(object sender, EventArgs e)
-    {
-      MyClass.ConfirmarPedido(txtPedidoId.Text, accessToken);
-    }
-    private void button14_Click(object sender, EventArgs e)
-    {
-      MyClass.PrepararPedido(txtPedidoId.Text, accessToken);
-    }
-    private void button20_Click(object sender, EventArgs e)
-    {
-      MyClass.EntregarPedido(txtPedidoId.Text, accessToken);
-    }
-    private void button19_Click(object sender, EventArgs e)
-    {
-      MyClass.ProntoPedido(txtPedidoId.Text, accessToken);
-    }
-    private void button10_Click(object sender, EventArgs e)
-    {
-      string result = MyClass.DetalhesPedido(txtPedidoId.Text, accessToken);
-      rtb1.Text = result;
-    }
-    private void button22_Click(object sender, EventArgs e)
-    {
-      MyClass.AcknowledgeEvent(accessToken, rtb1.Text);
-    }
-    private void button24_Click(object sender, EventArgs e)
-    {
-      string result = MyClass.GetMerchantStatus(accessToken);
-      rtb1.Text = result;
-    }
-    private void button25_Click(object sender, EventArgs e)
-    {
-      ClaMys.DbConect();
     }
   }
 }
