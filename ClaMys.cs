@@ -78,7 +78,7 @@ namespace burger
     }
     public static DataTable GetPedidos()
     {
-      string formattedDate = DateTime.Now.ToString("dd-MM-yyyy");
+      //string formattedDate = DateTime.Now.ToString("dd-MM-yyyy");
       DataTable dt = new DataTable();
       try
       {
@@ -87,8 +87,8 @@ namespace burger
           connection.Open();
           using (var cmd = connection.CreateCommand())
           {
-            cmd.CommandText = "SELECT * FROM v_pedidos ORDER BY dataped DESC; ";
-            cmd.Parameters.AddWithValue("@fdata", formattedDate);
+            cmd.CommandText = "SELECT * FROM v_pedidos2; ";
+            //cmd.Parameters.AddWithValue("@fdata", formattedDate);
             using (var da = new MySqlDataAdapter(cmd))
             {
               da.Fill(dt);
@@ -221,6 +221,14 @@ namespace burger
               }
               detalhesjson = FoodPro.DetaPedido(pedido.orderId, token);
               InsertItensPed(detalhesjson);
+              DetalhesPedido detalhes = JsonConvert.DeserializeObject<DetalhesPedido>(detalhesjson);
+              using (var cmd = connection.CreateCommand())
+              {
+                cmd.CommandText = "UPDATE pedido SET nome_cli=@nome WHERE id=@id";
+                cmd.Parameters.AddWithValue("@id", pedido.orderId);
+                cmd.Parameters.AddWithValue("@nome", detalhes.Customer.Name);
+                cmd.ExecuteNonQuery();
+              }             
             }
             else {
               using (var cmd = connection.CreateCommand())

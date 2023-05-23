@@ -13,7 +13,18 @@ namespace burger
     public string accessToken = "";
     public string pedidoId = "";
     public string pollresult = "";
-    private static System.Timers.Timer timer;
+    private System.Windows.Forms.Timer timer1;
+    public void InitTimer()
+    {
+      timer1 = new System.Windows.Forms.Timer();
+      timer1.Tick += new EventHandler(timer1_Tick);
+      timer1.Interval = 30000; // in miliseconds
+      timer1.Start();
+    }
+    private void timer1_Tick(object sender, EventArgs e)
+    {
+      FazPol();
+    }
     public Form1()
     {
       InitializeComponent();
@@ -29,8 +40,11 @@ namespace burger
       FoodPro.Polling(accessToken);
       Thread.Sleep(2000); 
       FoodPro.Polling(accessToken);
-      //Thread.Sleep(2000);
-      //string result2 = FoodPro.GetMerchantStatus(accessToken);
+      Thread.Sleep(2000);
+      string result2 = FoodPro.GetMerchantStatus(accessToken);
+      dynamic responseObject2 = JsonConvert.DeserializeObject(result2);
+      Console.WriteLine(responseObject2[0].state);
+      InitTimer();
     }
     private void PopulaPedido() {
       try
@@ -72,7 +86,6 @@ namespace burger
       DataGridViewRow row = this.dgvPed.Rows[e.RowIndex];
       string codigo = row.Cells["codigo"].Value.ToString();
       txtPedidoId.Text = codigo;  
-      comboBox4.Text = row.Cells["estado"].Value.ToString();
       try
       {
         DataTable dt = new DataTable();
