@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace burger
 {
-  public partial class Form1 : Form
+  public partial class FrmAtendente : Form
   {
     public string accessToken = "";
     public string pedidoId = "";
@@ -25,7 +25,7 @@ namespace burger
     {
       FazPol();
     }
-    public Form1()
+    public FrmAtendente()
     {
       InitializeComponent();
     }
@@ -85,6 +85,22 @@ namespace burger
     {
       DataGridViewRow row = this.dgvPed.Rows[e.RowIndex];
       string codigo = row.Cells["codigo"].Value.ToString();
+      string estado = row.Cells["estado"].Value.ToString();
+      if (estado == "novo")
+      {
+        btnConfirmaPed.Enabled = true;
+      }
+      else {
+        btnConfirmaPed.Enabled = false;
+      }
+      if (estado == "pronto")
+      {
+        btnEntregaPed.Enabled = true;
+      }
+      else
+      {
+        btnEntregaPed.Enabled = false;
+      }
       txtPedidoId.Text = codigo;  
       try
       {
@@ -100,26 +116,18 @@ namespace burger
     private void btnConfirmaPed_Click(object sender, EventArgs e)
     {
       FoodPro.ConfirmarPedido(txtPedidoId.Text, accessToken);
-      label2.Text = "Confirmado!";
-    }
-    private void btnPreparaPed_Click(object sender, EventArgs e)
-    {
-      FoodPro.PrepararPedido(txtPedidoId.Text, accessToken);
-      label2.Text = "Preparando!";
+      ClaMys.AtualizaStatus(txtPedidoId.Text, "CFM");
+      btnConfirmaPed.Enabled = false;
+      FazPol();
+      Console.WriteLine("Confirmado!");
     }
     private void btnEntregaPed_Click(object sender, EventArgs e)
     {
       FoodPro.EntregarPedido(txtPedidoId.Text, accessToken);
-      label2.Text = "Saiu para entrega!";
-    }
-    private void btnProntoPed_Click(object sender, EventArgs e)
-    {
-      FoodPro.ProntoPedido(txtPedidoId.Text, accessToken);
-      label2.Text = "Pedido pronto!";
-    }
-    private void btnPol_Click(object sender, EventArgs e)
-    {
+      ClaMys.AtualizaStatus(txtPedidoId.Text, "DSP");
+      btnEntregaPed.Enabled = false;
       FazPol();
+      Console.WriteLine("Saiu para entrega!");
     }
     private void dgvPed_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
     {
@@ -131,22 +139,22 @@ namespace burger
           dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Khaki;
           break;
         case "confirmado":
-          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Aquamarine;
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Cyan;
           break;
         case "cancelado":
           dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightCoral;
           break;
         case "pronto":
-          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Aquamarine;
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Violet;
           break;
         case "enviado":
-          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Aquamarine;
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.DodgerBlue;
           break;
         case "concluido":
           dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.PaleGreen;
           break;
         case "preparando":
-          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Aquamarine;
+          dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Thistle;
           break;
       }
     }

@@ -1,6 +1,6 @@
 ﻿namespace burger
 {
-    partial class Form1
+    partial class FrmAtendente
     {
         /// <summary>
         /// Variável de designer necessária.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAtendente));
       this.dgvDetails = new System.Windows.Forms.DataGridView();
       this.btnPol = new System.Windows.Forms.Button();
       this.btnEntregaPed = new System.Windows.Forms.Button();
@@ -39,7 +39,7 @@
       this.label6 = new System.Windows.Forms.Label();
       this.dgvPed = new System.Windows.Forms.DataGridView();
       this.label1 = new System.Windows.Forms.Label();
-      this.label2 = new System.Windows.Forms.Label();
+      this.checkBox1 = new System.Windows.Forms.CheckBox();
       ((System.ComponentModel.ISupportInitialize)(this.dgvDetails)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvPed)).BeginInit();
       this.SuspendLayout();
@@ -71,10 +71,10 @@
       this.btnPol.Text = "Puxar";
       this.btnPol.UseVisualStyleBackColor = true;
       this.btnPol.Visible = false;
-      this.btnPol.Click += new System.EventHandler(this.btnPol_Click);
       // 
       // btnEntregaPed
       // 
+      this.btnEntregaPed.Enabled = false;
       this.btnEntregaPed.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.btnEntregaPed.Location = new System.Drawing.Point(753, 65);
       this.btnEntregaPed.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -87,6 +87,7 @@
       // 
       // btnConfirmaPed
       // 
+      this.btnConfirmaPed.Enabled = false;
       this.btnConfirmaPed.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.btnConfirmaPed.Location = new System.Drawing.Point(645, 65);
       this.btnConfirmaPed.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -179,25 +180,23 @@
       this.label1.TabIndex = 55;
       this.label1.Text = "01-01-2023";
       // 
-      // label2
+      // checkBox1
       // 
-      this.label2.AutoSize = true;
-      this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.label2.ForeColor = System.Drawing.Color.Gold;
-      this.label2.Location = new System.Drawing.Point(655, 554);
-      this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(44, 20);
-      this.label2.TabIndex = 56;
-      this.label2.Text = "msg";
+      this.checkBox1.AutoSize = true;
+      this.checkBox1.Location = new System.Drawing.Point(645, 478);
+      this.checkBox1.Name = "checkBox1";
+      this.checkBox1.Size = new System.Drawing.Size(189, 27);
+      this.checkBox1.TabIndex = 56;
+      this.checkBox1.Text = "Mostrar concluídos";
+      this.checkBox1.UseVisualStyleBackColor = true;
       // 
-      // Form1
+      // FrmAtendente
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 23F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.SeaGreen;
       this.ClientSize = new System.Drawing.Size(1105, 609);
-      this.Controls.Add(this.label2);
+      this.Controls.Add(this.checkBox1);
       this.Controls.Add(this.label1);
       this.Controls.Add(this.dgvDetails);
       this.Controls.Add(this.btnPol);
@@ -213,7 +212,7 @@
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
       this.MaximizeBox = false;
-      this.Name = "Form1";
+      this.Name = "FrmAtendente";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "SGI - Pedidos";
       this.Load += new System.EventHandler(this.Form1_Load);
@@ -235,7 +234,7 @@
     private System.Windows.Forms.Label label6;
     private System.Windows.Forms.DataGridView dgvPed;
     private System.Windows.Forms.Label label1;
-    private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.CheckBox checkBox1;
   }
 }
 

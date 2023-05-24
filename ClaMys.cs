@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace burger
@@ -27,21 +28,18 @@ namespace burger
         return false;
       }
     }
-    public static bool ChecaGestor(string login)
+    public static int GetCargoById(string quem)
     {
-      bool ehgestor = false;
-      using (MySqlConnection connection = new MySqlConnection(mySkiString))
+      using (var connection = new MySqlConnection(mySkiString))
       {
         connection.Open();
-        string query = "SELECT COUNT(*) FROM usuario WHERE nick = @Login AND id_cargo = 1";
-        using (MySqlCommand command = new MySqlCommand(query, connection))
+        using (var command = new MySqlCommand("SELECT id_cargo FROM usuario WHERE nick = @nick", connection))
         {
-          command.Parameters.AddWithValue("@Login", login);
-          int count = Convert.ToInt32(command.ExecuteScalar());
-          ehgestor = (count > 0);
+          command.Parameters.AddWithValue("@nick", quem);
+          var cargo = command.ExecuteScalar();
+          return (int)cargo;
         }
       }
-      return ehgestor;
     }
     public static bool VerificarCredenciais(string login, string senha)
     {
@@ -78,7 +76,6 @@ namespace burger
     }
     public static DataTable GetPedidos()
     {
-      //string formattedDate = DateTime.Now.ToString("dd-MM-yyyy");
       DataTable dt = new DataTable();
       try
       {
@@ -87,8 +84,33 @@ namespace burger
           connection.Open();
           using (var cmd = connection.CreateCommand())
           {
-            cmd.CommandText = "SELECT * FROM v_pedidos2; ";
-            //cmd.Parameters.AddWithValue("@fdata", formattedDate);
+            cmd.CommandText = "SELECT * FROM v_pedidos2 where estado not like 'concluido' and estado not like 'cancelado'; ";
+            using (var da = new MySqlDataAdapter(cmd))
+            {
+              da.Fill(dt);
+              return dt;
+            }
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+    }
+    public static DataTable GetCozinha()
+    {
+      string formattedDate = DateTime.Now.ToString("yyyy-MM-dd");
+      DataTable dt = new DataTable();
+      try
+      {
+        using (var connection = new MySqlConnection(mySkiString))
+        {
+          connection.Open();
+          using (var cmd = connection.CreateCommand())
+          {
+            cmd.CommandText = "SELECT codigo,horap,estado FROM v_cozinha WHERE datap = @fdata AND estado = 'confirmado' OR estado = 'preparando'; ";
+            cmd.Parameters.AddWithValue("@fdata", formattedDate);
             using (var da = new MySqlDataAdapter(cmd))
             {
               da.Fill(dt);
@@ -113,6 +135,30 @@ namespace burger
           using (var cmd = connection.CreateCommand())
           {
             cmd.CommandText = "SELECT * FROM v_clientes";
+            using (var da = new MySqlDataAdapter(cmd))
+            {
+              da.Fill(dt);
+              return dt;
+            }
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        throw ex;
+      }
+    }
+    public static DataTable GetUsuarios()
+    {
+      DataTable dt = new DataTable();
+      try
+      {
+        using (var connection = new MySqlConnection(mySkiString))
+        {
+          connection.Open();
+          using (var cmd = connection.CreateCommand())
+          {
+            cmd.CommandText = "SELECT * FROM v_usuarios";
             using (var da = new MySqlDataAdapter(cmd))
             {
               da.Fill(dt);
@@ -224,20 +270,15 @@ namespace burger
               DetalhesPedido detalhes = JsonConvert.DeserializeObject<DetalhesPedido>(detalhesjson);
               using (var cmd = connection.CreateCommand())
               {
-                cmd.CommandText = "UPDATE pedido SET nome_cli=@nome WHERE id=@id";
+                cmd.CommandText = "UPDATE pedido SET nome_cli=@nome, valor_total=@total WHERE id=@id";
                 cmd.Parameters.AddWithValue("@id", pedido.orderId);
                 cmd.Parameters.AddWithValue("@nome", detalhes.Customer.Name);
+                cmd.Parameters.AddWithValue("@total", detalhes.Total.OrderAmount);
                 cmd.ExecuteNonQuery();
               }             
             }
-            else {
-              using (var cmd = connection.CreateCommand())
-              {
-                cmd.CommandText = "UPDATE pedido SET estado=@estado WHERE id=@id";
-                cmd.Parameters.AddWithValue("@id", pedido.orderId);
-                cmd.Parameters.AddWithValue("@estado", pedido.code);
-                cmd.ExecuteNonQuery();
-              }
+            if (pedido.code == "CON") {
+              AtualizaStatus(pedido.orderId, pedido.code);
             }
           }
         }
@@ -247,6 +288,19 @@ namespace burger
         throw ex;
       }
       return tempedido;
+    }
+    public static void AtualizaStatus(string pedido, string estado) {
+      using (var connection = new MySqlConnection(mySkiString))
+      {
+        connection.Open();
+        using (var cmd = connection.CreateCommand())
+        {
+          cmd.CommandText = "UPDATE pedido SET estado=@estado WHERE id=@id";
+          cmd.Parameters.AddWithValue("@id", pedido);
+          cmd.Parameters.AddWithValue("@estado", estado);
+          cmd.ExecuteNonQuery();
+        }
+      }
     }
   }
 }

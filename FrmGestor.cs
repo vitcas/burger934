@@ -1,18 +1,39 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Data;
+using System.Net.Http;
 using System.Windows.Forms;
 
 namespace burger
 {
-  public partial class Form3 : Form
+  public partial class FrmGestor : Form
   {
-    public Form3()
+    public FrmGestor()
     {
       InitializeComponent();
     }
-
+    public static Endereco ConsultarCep(string cep)
+    {
+      using (var client = new HttpClient())
+      {
+        var response = client.GetAsync($"https://viacep.com.br/ws/{cep}/json/").Result;
+        var content = response.Content.ReadAsStringAsync().Result;
+        var result = JsonConvert.DeserializeObject<Endereco>(content);
+        return result;
+      }
+    }
     private void Form3_Load(object sender, EventArgs e)
     {
+      try
+      {
+        DataTable dt = new DataTable();
+        dt = ClaMys.GetUsuarios();
+        dgvUsu.DataSource = dt;
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show("Erro : " + ex.Message);
+      }
       try
       {
         DataTable dt = new DataTable();
@@ -34,7 +55,6 @@ namespace burger
         MessageBox.Show("Erro : " + ex.Message);
       }
     }
-
     private void btnAdcCliente_Click(object sender, EventArgs e)
     {
       try
@@ -61,14 +81,13 @@ namespace burger
         cli.Bairro = txtBairro.Text;
         cli.Logradouro = txtLog.Text;
 
-        DalHelper.AddCli(cli);
+        //DalHelper.AddCli(cli);
       }
       catch (Exception ex)
       {
         MessageBox.Show("Erro : " + ex.Message);
       }
     }
-
     private void dgvCli_CellClick(object sender, DataGridViewCellEventArgs e)
     {
       if (e.RowIndex >= 0)
@@ -95,7 +114,6 @@ namespace burger
       cmbTipo.Text = row.Cells["categoria"].Value.ToString();
       numValor.Text = row.Cells["Valor"].Value.ToString();
     }
-
     private void btnLimpaProd_Click(object sender, EventArgs e)
     {
       txtCodProd.Text = "";
@@ -104,7 +122,6 @@ namespace burger
       cmbTipo.Text = "";
       numValor.Text = "";
     }
-
     private void btnAdcProduto_Click(object sender, EventArgs e)
     {
       try
@@ -114,7 +131,7 @@ namespace burger
         prod.Descricao = txtDescProd.Text;
         prod.Valor = (float)numValor.Value;
         prod.Tipo = 1;
-        DalHelper.AddProd(prod);
+        //DalHelper.AddProd(prod);
       }
       catch (Exception ex)
       {
@@ -134,15 +151,23 @@ namespace burger
       txtBairro.Text = "";
       txtLog.Text = "";
     }
-
     private void btnConsultaCep_Click(object sender, EventArgs e)
     {
       btnConsultaCep.Enabled = false;
-      var resultado = Apis.ConsultarCep(txtCep.Text);
+      var resultado = ConsultarCep(txtCep.Text);
       txtLog.Text = resultado.Logradouro;
       txtBairro.Text = resultado.Bairro;
       txtUf.Text = resultado.Uf;
       btnConsultaCep.Enabled = true;
+    }
+    private void btnAdcUsuario_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void button25_Click(object sender, EventArgs e)
+    {
+
     }
   }
 }
