@@ -1,17 +1,15 @@
 ﻿using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace burger
 {
   public class ClaMys
   {
-    public static string mySkiString = "server=127.0.0.1;uid=root;pwd=swordfish47;database=burger934";
+    public static string mySkiString = "server=delli3-mysql.at.remote.it;port=33001;uid=cecilia;pwd=2rTcx6scfUBAZjkZ;database=burger934";
     public static bool DbConect()
     {
       MySqlConnection conn;
@@ -74,8 +72,11 @@ namespace burger
       }
       return existe;
     }
-    public static DataTable GetPedidos()
+    public static DataTable GetPedidos(string filtro)
     {
+      string consulta = "SELECT * FROM v_pedidos2 where estado not like 'concluido' and estado not like 'cancelado'; ";
+      if (filtro != "todos")
+        consulta = "SELECT * FROM v_pedidos2 where estado like @filtro";
       DataTable dt = new DataTable();
       try
       {
@@ -84,7 +85,8 @@ namespace burger
           connection.Open();
           using (var cmd = connection.CreateCommand())
           {
-            cmd.CommandText = "SELECT * FROM v_pedidos2 where estado not like 'concluido' and estado not like 'cancelado'; ";
+            cmd.CommandText = consulta;
+            cmd.Parameters.AddWithValue("@filtro", filtro);
             using (var da = new MySqlDataAdapter(cmd))
             {
               da.Fill(dt);

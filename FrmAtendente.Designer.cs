@@ -39,7 +39,6 @@
       this.label6 = new System.Windows.Forms.Label();
       this.dgvPed = new System.Windows.Forms.DataGridView();
       this.label1 = new System.Windows.Forms.Label();
-      this.checkBox1 = new System.Windows.Forms.CheckBox();
       ((System.ComponentModel.ISupportInitialize)(this.dgvDetails)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.dgvPed)).BeginInit();
       this.SuspendLayout();
@@ -103,6 +102,7 @@
       this.comboBox4.Font = new System.Drawing.Font("Microsoft YaHei", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.comboBox4.FormattingEnabled = true;
       this.comboBox4.Items.AddRange(new object[] {
+            "todos",
             "novo",
             "confirmado",
             "preparando",
@@ -115,6 +115,7 @@
       this.comboBox4.Name = "comboBox4";
       this.comboBox4.Size = new System.Drawing.Size(135, 31);
       this.comboBox4.TabIndex = 38;
+      this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox4_SelectedIndexChanged);
       // 
       // txtPedidoId
       // 
@@ -125,7 +126,6 @@
       this.txtPedidoId.ReadOnly = true;
       this.txtPedidoId.Size = new System.Drawing.Size(361, 30);
       this.txtPedidoId.TabIndex = 41;
-      this.txtPedidoId.Text = "bfe4c61f-c20c-4cb2-ae47-af15208529f1";
       // 
       // label13
       // 
@@ -178,17 +178,7 @@
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(137, 30);
       this.label1.TabIndex = 55;
-      this.label1.Text = "01-01-2023";
-      // 
-      // checkBox1
-      // 
-      this.checkBox1.AutoSize = true;
-      this.checkBox1.Location = new System.Drawing.Point(645, 478);
-      this.checkBox1.Name = "checkBox1";
-      this.checkBox1.Size = new System.Drawing.Size(189, 27);
-      this.checkBox1.TabIndex = 56;
-      this.checkBox1.Text = "Mostrar concluídos";
-      this.checkBox1.UseVisualStyleBackColor = true;
+      this.label1.Text = "01-01-2001";
       // 
       // FrmAtendente
       // 
@@ -196,7 +186,6 @@
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.SeaGreen;
       this.ClientSize = new System.Drawing.Size(1105, 609);
-      this.Controls.Add(this.checkBox1);
       this.Controls.Add(this.label1);
       this.Controls.Add(this.dgvDetails);
       this.Controls.Add(this.btnPol);
@@ -234,7 +223,6 @@
     private System.Windows.Forms.Label label6;
     private System.Windows.Forms.DataGridView dgvPed;
     private System.Windows.Forms.Label label1;
-    private System.Windows.Forms.CheckBox checkBox1;
   }
 }
 

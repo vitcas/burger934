@@ -13,6 +13,7 @@ namespace burger
     public string accessToken = "";
     public string pedidoId = "";
     public string pollresult = "";
+    public string filtro = "todos";
     private System.Windows.Forms.Timer timer1;
     public void InitTimer()
     {
@@ -50,7 +51,7 @@ namespace burger
       try
       {
         DataTable dt = new DataTable();
-        dt = ClaMys.GetPedidos();
+        dt = ClaMys.GetPedidos(filtro);
         dgvPed.DataSource = dt;
       }
       catch (Exception ex)
@@ -157,6 +158,11 @@ namespace burger
           dgvPed.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Thistle;
           break;
       }
+    }
+    private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
+    {
+      filtro = comboBox4.SelectedItem.ToString();
+      PopulaPedido();
     }
   }
 }
