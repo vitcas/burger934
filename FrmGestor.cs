@@ -104,7 +104,6 @@ namespace burger
         txtLog.Text = row.Cells["Logradouro"].Value.ToString();
       }
     }
-
     private void dgvProd_CellClick(object sender, DataGridViewCellEventArgs e)
     {
       DataGridViewRow row = this.dgvProd.Rows[e.RowIndex];
@@ -138,7 +137,6 @@ namespace burger
         MessageBox.Show("Erro : " + ex.Message);
       }
     }
-
     private void btnLimpaCliente_Click(object sender, EventArgs e)
     {
       txtId.Text = "";
@@ -159,15 +157,6 @@ namespace burger
       txtBairro.Text = resultado.Bairro;
       txtUf.Text = resultado.Uf;
       btnConsultaCep.Enabled = true;
-    }
-    private void btnAdcUsuario_Click(object sender, EventArgs e)
-    {
-
-    }
-
-    private void button25_Click(object sender, EventArgs e)
-    {
-
     }
   }
 }

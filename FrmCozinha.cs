@@ -123,7 +123,6 @@ namespace burger
     {
 
     }
-
     private void dgvCozinha_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
     {
       DataGridViewRow row = this.dgvCozinha.Rows[e.RowIndex];

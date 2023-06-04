@@ -9,7 +9,7 @@ namespace burger
 {
   public class ClaMys
   {
-    public static string mySkiString = "server=delli3-mysql.at.remote.it;port=33001;uid=cecilia;pwd=2rTcx6scfUBAZjkZ;database=burger934";
+    public static string mySkiString = "server=localhost;port=3306;uid=root;pwd=swordfish47;database=burger934";
     public static bool DbConect()
     {
       MySqlConnection conn;
@@ -208,7 +208,7 @@ namespace burger
           connection.Open();
           using (var cmd = connection.CreateCommand())
           {
-            cmd.CommandText = "select SUBSTRING(ip.id_pedido, 1, 8) as pedido, produto.nome as item, ip.quantidade as qtd from item_pedido ip inner join produto on ip.id_produto = produto.id where id_pedido = @id";
+            cmd.CommandText = "select SUBSTRING(ip.id_pedido, 1, 8) as pedido, produto.nome as item, ip.quantidade as qtd, ip.observacoes from item_pedido ip inner join produto on ip.id_produto = produto.id where id_pedido = @id";
             cmd.Parameters.AddWithValue("@id", id);
             using (var da = new MySqlDataAdapter(cmd))
             {
@@ -226,17 +226,17 @@ namespace burger
     public static void InsertItensPed(string json) {
       DetalhesPedido detalhes = JsonConvert.DeserializeObject<DetalhesPedido>(json);
       int npedidos = detalhes.Items.Length;
-      for (int i = 0; i < npedidos; i++)
-      {
-        using (var connection = new MySqlConnection(mySkiString))
-        {
+      for (int i = 0; i < npedidos; i++){
+        //if (detalhes.Items[i].Observations == null)
+          //detalhes.Items[i].Observations = "nope";
+        using (var connection = new MySqlConnection(mySkiString)){
           connection.Open();
-          using (var cmd = connection.CreateCommand())
-          {
-            cmd.CommandText = "INSERT INTO item_pedido (id_pedido, id_produto, quantidade) VALUES (@idped, @idprod, @qtd)";
+          using (var cmd = connection.CreateCommand()){
+            cmd.CommandText = "INSERT INTO item_pedido (id_pedido, id_produto, quantidade, observacoes) VALUES (@idped, @idprod, @qtd, @obs)";
             cmd.Parameters.AddWithValue("@idped", detalhes.Id);
             cmd.Parameters.AddWithValue("@idprod", detalhes.Items[i].ExternalCode);
             cmd.Parameters.AddWithValue("@qtd", detalhes.Items[i].Quantity);
+            cmd.Parameters.AddWithValue("@obs", detalhes.Items[i].Observations);
             cmd.ExecuteNonQuery();
           }
         }
@@ -247,18 +247,15 @@ namespace burger
     {
       string detalhesjson = "";
       int tempedido = 0;
-      try
-      {
-        List<Pedido> pedidos = JsonConvert.DeserializeObject<List<Pedido>>(json);
-        using (var connection = new MySqlConnection(mySkiString))
-        {
-          connection.Open();
-          foreach (var pedido in pedidos)
-          {
-            string jsonevento = JsonConvert.SerializeObject(pedido);            
-            if (!VerificaPedido(pedido.orderId))
+      List<Pedido> pedidos = JsonConvert.DeserializeObject<List<Pedido>>(json);
+      using (var connection = new MySqlConnection(mySkiString)){
+        connection.Open();
+        foreach (var pedido in pedidos){
+          string jsonevento = JsonConvert.SerializeObject(pedido);            
+          if (!VerificaPedido(pedido.orderId)){
+            tempedido++;
+            try
             {
-              tempedido++;
               using (var cmd = connection.CreateCommand())
               {
                 cmd.CommandText = "INSERT INTO pedido (id, dataped, estado) VALUES (@id, @dataped, @estado)";
@@ -267,9 +264,16 @@ namespace burger
                 cmd.Parameters.AddWithValue("@estado", pedido.code);
                 cmd.ExecuteNonQuery();
               }
-              detalhesjson = FoodPro.DetaPedido(pedido.orderId, token);
-              InsertItensPed(detalhesjson);
-              DetalhesPedido detalhes = JsonConvert.DeserializeObject<DetalhesPedido>(detalhesjson);
+            }
+            catch (Exception ex)
+            {
+              throw ex;
+            }
+            detalhesjson = FoodPro.DetaPedido(pedido.orderId, token);
+            InsertItensPed(detalhesjson);
+            DetalhesPedido detalhes = JsonConvert.DeserializeObject<DetalhesPedido>(detalhesjson);
+            try
+            {
               using (var cmd = connection.CreateCommand())
               {
                 cmd.CommandText = "UPDATE pedido SET nome_cli=@nome, valor_total=@total WHERE id=@id";
@@ -277,18 +281,18 @@ namespace burger
                 cmd.Parameters.AddWithValue("@nome", detalhes.Customer.Name);
                 cmd.Parameters.AddWithValue("@total", detalhes.Total.OrderAmount);
                 cmd.ExecuteNonQuery();
-              }             
+              }
             }
-            if (pedido.code == "CON") {
-              AtualizaStatus(pedido.orderId, pedido.code);
+            catch (Exception ex)
+            {
+              throw ex;
             }
           }
+          if (pedido.code == "CON") {
+            AtualizaStatus(pedido.orderId, pedido.code);
+          }
         }
-      }
-      catch (Exception ex)
-      {
-        throw ex;
-      }
+      }    
       return tempedido;
     }
     public static void AtualizaStatus(string pedido, string estado) {
